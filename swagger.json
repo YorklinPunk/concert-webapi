@@ -1,0 +1,140 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "My Web API",
+      "version": "1.0.0",
+      "description": "API documentation for My Web API"
+    },
+    "paths": {
+        "/api/participants": {
+            "get": {
+            "summary": "Get all participants",
+            "description": "Fetches all participants from the Google Sheets via Apps Script",
+            "responses": {
+                "200": {
+                "description": "Successful response",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                        "type": "object",
+                        "properties": {
+                            "IdColumn": { "type": "string" },
+                            "Marca temporal": { "type": "string" },
+                            "Nombres": { "type": "string" },
+                            "Apellidos": { "type": "string" },
+                            "Correo electrónico": { "type": "string" },
+                            "Número celular": { "type": "string" },
+                            "Estado": { "type": "string" }
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        },
+        "/api/participants/{codigo}": {
+            "get": {
+            "summary": "Get participant by ID",
+            "description": "Fetches a specific participant by ID from Google Sheets via Apps Script",
+            "parameters": [
+                {
+                "name": "codigo",
+                "in": "path",
+                "required": true,
+                "description": "The ID of the participant",
+                "schema": {
+                    "type": "integer"
+                }
+                }
+            ],
+            "responses": {
+                "200": {
+                "description": "Successful response",
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                        "IdColumn": { "type": "string" },
+                        "Marca temporal": { "type": "string" },
+                        "Nombres": { "type": "string" },
+                        "Apellidos": { "type": "string" },
+                        "Correo electrónico": { "type": "string" },
+                        "Número celular": { "type": "string" },
+                        "Estado": { "type": "string" }
+                        }
+                    }
+                    }
+                }
+                },
+                "404": {
+                "description": "Participant not found"
+                }
+            }
+            }        
+        },
+        "/api/participants/update": {
+            "post": {
+                "summary": "Actualizar estado del participante",
+                "description": "Este endpoint actualiza el estado de un participante. Si el estado es `false`, se actualiza a `true`. Si el estado ya es `true`, devuelve un mensaje diciendo que el QR ya ha sido utilizado.",
+                "operationId": "updateParticipantState",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "codigo": {
+                                        "type": "integer",
+                                        "description": "Código del participante"
+                                    }
+                                },
+                                "required": ["codigo"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Estado actualizado correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Mensaje sobre el estado del participante"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Mensaje de error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }   
+    }
+}
+  
