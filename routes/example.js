@@ -10,8 +10,8 @@ const fs = require("fs");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "zetita159@gmail.com", // Cambia esto por tu correo
-    pass: "itfh nxuc fcos jmgi" // Contraseña de aplicación (ver nota abajo)
+    user: process.env.USER_EMAIL_SENDER, // Cambia esto por tu correo
+    pass: process.env.PASS_EMAIL_SENDER // Contraseña de aplicación (ver nota abajo)
   }
 });
 
@@ -24,7 +24,7 @@ async function generateQRAndSendEmail(data) {
 
     // Configurar el contenido del correo
     const mailOptions = {
-      from: "zetita159@gmail.com", // Correo del remitente
+      from: process.env.USER_EMAIL_SENDER, // Correo del remitente
       to: data["Correo electrónico"], // Destinatario
       subject: "Código QR Generado",
       text: `Hola ${data.Nombres} ${data.Apellidos}, aquí tienes tu código QR generado.`,
@@ -55,52 +55,84 @@ async function generateQRAndSendEmail(data) {
     };
   }
 }
+
 // Endpoint to fetch participants data from Apps Script
 router.get("/", async (req, res) => {
+  const response = { success: false, data: [], error: null };
   try {
-    const scriptUrl = "https://script.googleusercontent.com/macros/echo?user_content_key=9yzEuoO398kD-kdUYZdo8Rm4TfLfDvV807aSEo24tZeckhtXBpaYoeT229PfCUcfe9nlzi2wYDt50Xoeif26pBYfeXbgDD5om5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnLmAXRWGdKu6rC9-nKHq4sTLnWsbyhNtg6t_dvtyZnro_pQhf7RuusB81vMJk5vT6WxP0IYEeef5gi3AOKFzO4zF15PEdb5pbdz9Jw9Md8uu&lib=M4zWjbcaVN7pqnKsV-vY-cRK3RNb248HK";
-    const response = await axios.get(scriptUrl);
-    res.json(response.data);
+    const scriptUrl = process.env.URL_APP_SCRIP;    
+    const responseUrl = await axios.get(scriptUrl);
+
+    response.success = true;
+    response.data = responseUrl.data.data;
+    res.json(response);
   } catch (error) {
+    response.error = error.message;
     console.error("Error fetching data from Google Apps Script:", error);
-    res.status(500).json({ error: "Failed to fetch participants data" });
+    res.status(500).json(response);
   }
 });
 
 router.get("/:codigo", async (req, res) => {
+  const response = { success: false, data: [], error: null };
+
   try {
-    const scriptUrl = "https://script.googleusercontent.com/macros/echo?user_content_key=9yzEuoO398kD-kdUYZdo8Rm4TfLfDvV807aSEo24tZeckhtXBpaYoeT229PfCUcfe9nlzi2wYDt50Xoeif26pBYfeXbgDD5om5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnLmAXRWGdKu6rC9-nKHq4sTLnWsbyhNtg6t_dvtyZnro_pQhf7RuusB81vMJk5vT6WxP0IYEeef5gi3AOKFzO4zF15PEdb5pbdz9Jw9Md8uu&lib=M4zWjbcaVN7pqnKsV-vY-cRK3RNb248HK"; // Reemplaza con tu enlace
+    const scriptUrl = process.env.URL_APP_SCRIP;    
     let { codigo } = req.params;
-    const response = await axios.get(scriptUrl);
-    const data = (response.data).data;
+    const responseUrl = await axios.get(scriptUrl);
+    const data = (responseUrl.data).data;
     const participant = data.find(item => item.IdColumn === parseInt(codigo));
 
     if (participant) {
-      res.json(participant);
+      response.success = true;
+      response.data = participant;
+      res.json(response);
     } else {
-      res.status(404).json({ error: `Participant with ID ${codigo} not found` });
+      response.error = `Participant with ID ${codigo} not found`;
+      res.status(404).json(response);
     }
   } catch (error) {
+    response.error = error.message;
     console.error("Error fetching data from Google Apps Script:", error);
-    res.status(500).json({ error: "Failed to fetch participant data" });
+    res.status(500).json(response);
   }
 });
 
 router.post("/update", async (req, res) => {
-  const { codigo } = req.body;
+  const response = { success: false, message: "", error: null };
+  const scriptUrl = process.env.URL_APP_SCRIP2;    
+  const { codigo, nombres, apellidos, correo } = req.body;
+  console.log(req.body)
 
   if (!codigo) {
-    return res.status(400).json({ message: "El código es obligatorio" });
+    response.message = "El código es obligatorio";
+    return res.status(400).json(response);
   }
 
-  const scriptUrl = "https://script.google.com/macros/s/AKfycbxpYV2_5Y_Mn3hN_iwSMMTsLSLjv_J2cMlBB7zk8RDMlz2yw11vDledN2JmKSPF7h6MiQ/exec"
-
   try {
-    const response = await axios.post(scriptUrl, { codigo });
-    res.status(200).json({ message: response.data.message });
+    const responseUrl = await axios.post(scriptUrl, { codigo });
+    if(responseUrl.data.message !== 'Qr válido'){
+      throw new Error(responseUrl.data.message);    
+    }
+
+    response.message = responseUrl.data.message;    
+    response.success = true;
+
+    const mailOptions = {
+      from: process.env.USER_EMAIL_SENDER, // Correo del remitente
+      to: correo, // Destinatario
+      subject: "Código QR Utilizado",
+      text: `Hola ${nombres} ${apellidos}, gracias por asistir a nuestro evento.`
+    };
+
+    console.log(mailOptions)
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json(response);
   } catch (error) {
+    response.error = error.message;
     console.error("Error al actualizar estado:", error);
-    res.status(500).json({ message: "Hubo un error al actualizar el estado" });
+    res.status(500).json(response);
   }
 });
 

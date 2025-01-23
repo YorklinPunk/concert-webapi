@@ -92,6 +92,18 @@
                                     "codigo": {
                                         "type": "integer",
                                         "description": "Código del participante"
+                                    },
+                                    "nombres": {
+                                        "type": "string",
+                                        "description": "Nombres del participante"
+                                    },
+                                    "apellidos": {
+                                        "type": "string",
+                                        "description": "Apellidos del participante"
+                                    },
+                                    "correo": {
+                                        "type": "string",
+                                        "description": "Correo del participante"
                                     }
                                 },
                                 "required": ["codigo"]
