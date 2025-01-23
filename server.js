@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware para JSON
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/public", express.static("public"));
 const exampleRoutes = require('./routes/example.js');
 app.use('/api/participants', exampleRoutes);
 

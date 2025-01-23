@@ -134,7 +134,92 @@
                     }
                 }
             }
-        }   
+        },
+        "/api/participants/generateQR": {
+            "post": {
+                "summary": "Generar QR",
+                "description": "Recibe datos de un participante y genera un código QR basado en ellos.",                
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "IdColumn": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "Marca temporal": {
+                                        "type": "string",
+                                        "example": "2025-01-23T01:21:32.714Z"
+                                    },
+                                    "Nombres": {
+                                        "type": "string",
+                                        "example": "nombre"
+                                    },
+                                    "Apellidos": {
+                                        "type": "string",
+                                        "example": "apellido"
+                                    },
+                                    "Correo electrónico": {
+                                        "type": "string",
+                                        "example": "example@gmail.com"
+                                    },
+                                    "Número celular": {
+                                        "type": "integer",
+                                        "example": 999999999
+                                    },
+                                    "Estado": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "required": ["IdColumn", "Nombres", "Apellidos", "Correo electrónico", "Número celular"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                "200": {
+                    "description": "QR generado con éxito.",
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "success": {
+                        "type": "boolean",
+                        "example": true
+                        },
+                        "message": {
+                        "type": "string",
+                        "example": "QR generado con éxito"
+                        },
+                        "filePath": {
+                        "type": "string",
+                        "example": "/public/images/qr_1.png"
+                        }
+                    }
+                    }
+                },
+                "500": {
+                    "description": "Error al generar el QR.",
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "success": {
+                        "type": "boolean",
+                        "example": false
+                        },
+                        "message": {
+                        "type": "string",
+                        "example": "Error al generar el QR"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+        }
     }
 }
   
