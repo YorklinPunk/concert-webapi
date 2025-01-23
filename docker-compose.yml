@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  concert-app:
+    container_name: concert-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3123:3000"  # Mapea el puerto 3000 del contenedor al puerto 3123 del host
+    environment:
+      - NODE_ENV=prodcuction  # Establece el entorno a desarrollo
+    volumes:
+      - .:/usr/src/app  # Monta el directorio actual en el contenedor
+
