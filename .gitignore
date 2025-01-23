@@ -1,0 +1,18 @@
+# Ignorar la carpeta de dependencias
+node_modules/
+
+# Ignorar archivos de configuración sensibles
+.env
+
+# Ignorar archivos de log
+logs/
+*.log
+npm-debug.log
+
+# Ignorar carpetas generadas
+dist/
+build/
+coverage/
+
+# Ignorar archivos empaquetados
+*.tgz
