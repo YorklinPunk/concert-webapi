@@ -111,9 +111,10 @@ router.post("/update", async (req, res) => {
 
   try {
     const responseUrl = await axios.post(scriptUrl, { codigo });
-    if(responseUrl.data.message !== 'Qr válido'){
-      throw new Error(responseUrl.data.message);    
-    }
+    // if(responseUrl.data.message !== 'Qr válido'){
+    //   response.message = responseUrl.data.message;
+    //   return res.status(200).json(response);
+    // }
 
     response.message = responseUrl.data.message;    
     response.success = true;
