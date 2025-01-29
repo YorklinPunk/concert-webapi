@@ -111,23 +111,23 @@ router.post("/update", async (req, res) => {
 
   try {
     const responseUrl = await axios.post(scriptUrl, { codigo });
-    // if(responseUrl.data.message !== 'Qr válido'){
-    //   response.message = responseUrl.data.message;
-    //   return res.status(200).json(response);
-    // }
-
     response.message = responseUrl.data.message;    
     response.success = true;
 
     const mailOptions = {
-      from: process.env.USER_EMAIL_SENDER, // Correo del remitente
-      to: correo, // Destinatario
+      from: process.env.USER_EMAIL_SENDER, 
+      to: correo,
       subject: "Código QR Utilizado",
       text: `Hola ${nombres} ${apellidos}, gracias por asistir a nuestro evento.`
     };
 
     console.log(mailOptions)
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (mailError) {
+      console.error("Error al enviar correo:", mailError.message);
+      response.error = "El correo no pudo enviarse, pero el proceso fue exitoso.";
+    }
 
     res.status(200).json(response);
   } catch (error) {

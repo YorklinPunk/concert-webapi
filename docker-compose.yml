@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.1'
 
 services:
   concert-app:
@@ -13,7 +13,7 @@ services:
       - USER_EMAIL_SENDER=zetita159@gmail.com
       - PASS_EMAIL_SENDER=itfh nxuc fcos jmgi
       - URL_APP_SCRIP=https://script.googleusercontent.com/macros/echo?user_content_key=9yzEuoO398kD-kdUYZdo8Rm4TfLfDvV807aSEo24tZeckhtXBpaYoeT229PfCUcfe9nlzi2wYDt50Xoeif26pBYfeXbgDD5om5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnLmAXRWGdKu6rC9-nKHq4sTLnWsbyhNtg6t_dvtyZnro_pQhf7RuusB81vMJk5vT6WxP0IYEeef5gi3AOKFzO4zF15PEdb5pbdz9Jw9Md8uu&lib=M4zWjbcaVN7pqnKsV-vY-cRK3RNb248HK
-      - URL_APP_SCRIP2=https://script.google.com/macros/s/AKfycbzJjvGc2JP-EHCay7TxxH_pmoRY9Wb6EzerJJsqecFwdbKBWsJgqZrI73hFsUcr2cp09Q/exec
+      #- URL_APP_SCRIP2=https://script.google.com/macros/s/AKfycbzJjvGc2JP-EHCay7TxxH_pmoRY9Wb6EzerJJsqecFwdbKBWsJgqZrI73hFsUcr2cp09Q/exec
+      - URL_APP_SCRIP2=https://script.google.com/macros/s/AKfycbwNjw9HHsMok4NRce-PztnoaLbbFV6-RG3KmgtiUdE00hQLTKTi9A9jRqjmPy2M0nVPbg/exec
     volumes:
       - .:/usr/src/app  # Monta el directorio actual en el contenedor
-
