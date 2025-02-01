@@ -4,8 +4,6 @@ const router = express.Router();
 const QRCode = require("qrcode");
 const nodemailer = require("nodemailer");
 const path = require("path");
-const fs = require("fs");
-
 // Configuración de transporte de correo
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -60,7 +58,7 @@ async function generateQRAndSendEmail(data) {
 router.get("/", async (req, res) => {
   const response = { success: false, data: [], error: null };
   try {
-    const scriptUrl = process.env.URL_APP_SCRIP;    
+    const scriptUrl = process.env.URL_APP_SCRIPT_GET;    
     const responseUrl = await axios.get(scriptUrl);
 
     response.success = true;
@@ -77,7 +75,7 @@ router.get("/:codigo", async (req, res) => {
   const response = { success: false, data: [], error: null };
 
   try {
-    const scriptUrl = process.env.URL_APP_SCRIP;    
+    const scriptUrl = process.env.URL_APP_SCRIPT_GET;    
     let { codigo } = req.params;
     const responseUrl = await axios.get(scriptUrl);
     const data = (responseUrl.data).data;
@@ -100,7 +98,7 @@ router.get("/:codigo", async (req, res) => {
 
 router.post("/update", async (req, res) => {
   const response = { success: false, message: "", error: null };
-  const scriptUrl = process.env.URL_APP_SCRIP2;    
+  const scriptUrl = process.env.URL_APP_SCRIPT_UPDATE;    
   const { codigo, nombres, apellidos, correo } = req.body;
   console.log(req.body)
 
@@ -110,6 +108,7 @@ router.post("/update", async (req, res) => {
   }
 
   try {
+    console.log("scriptUrl", scriptUrl)
     const responseUrl = await axios.post(scriptUrl, { codigo });
     response.message = responseUrl.data.message;    
     response.success = true;
@@ -122,12 +121,9 @@ router.post("/update", async (req, res) => {
     };
 
     console.log(mailOptions)
-    try {
-      await transporter.sendMail(mailOptions);
-    } catch (mailError) {
+    transporter.sendMail(mailOptions).catch(mailError => {
       console.error("Error al enviar correo:", mailError.message);
-      response.error = "El correo no pudo enviarse, pero el proceso fue exitoso.";
-    }
+    });
 
     res.status(200).json(response);
   } catch (error) {
