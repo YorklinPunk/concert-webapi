@@ -1,0 +1,75 @@
+.ticket-container {
+    display: flex; /* Utiliza flexbox para alinear los elementos en una fila */
+    justify-content: space-between; /* Espacio entre los elementos */
+    align-items: center; /* Alinea verticalmente al centro */
+    padding: 20px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde alrededor del contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+    background-color: #f9f9f9; /* Color de fondo */
+}
+
+.ticket {
+    width: 709px;
+    height: 304px;
+    background: #222;
+    color: white;
+    border-radius: 10px;
+    position: relative;
+    text-align: center;
+}
+
+.image-placeholder {
+    background: url('images/fondo.png') no-repeat center center;
+    background-size: cover;
+    height: 100%;
+    position: relative;
+    border-radius: 10px;
+}
+
+.text-overlay {
+    font-weight: 700;
+    font-style: normal;
+    color: rgb(255, 255, 255);
+    font-kerning: none;
+    text-decoration: none;
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    font-size: 29px;
+    font-weight: bold;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5); /* Oscurece la imagen para que el texto resalte */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.info {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.box {
+    background: gray;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.free-parking {
+    background: orange;
+    color: black;
+    padding: 5px 10px;
+    margin-top: 10px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.ticket-number{
+    font-size: 12px;
+    font-family: normal;
+    display: flex; /* Utiliza flexbox para alinear los elementos en una fila */
+    justify-content: space-between;
+    rotate: 270deg;
+}
