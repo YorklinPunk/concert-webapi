@@ -6,9 +6,10 @@
     border: 1px solid #ccc; /* Borde alrededor del contenedor */
     border-radius: 8px; /* Bordes redondeados */
     background-color: #f9f9f9; /* Color de fondo */
+    width: 65%;
 }
 
-.ticket {
+.ticket-info {
     width: 709px;
     height: 304px;
     background: #222;
@@ -67,9 +68,15 @@
 }
 
 .ticket-number{
-    font-size: 12px;
-    font-family: normal;
-    display: flex; /* Utiliza flexbox para alinear los elementos en una fila */
-    justify-content: space-between;
+    align-items: center;
+    width: 6%;
+    font-size: 25px;
+    display: flex;
     rotate: 270deg;
+    gap: 50px;
+    margin: 154px 0px 0px 0px;
+}
+
+.ticket {
+    /* margin-right: 10px; */
 }
